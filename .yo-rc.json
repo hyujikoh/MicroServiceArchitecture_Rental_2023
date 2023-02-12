@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.my.rental",
+      "nativeLanguage": "ko"
+    },
+    "jhipsterVersion": "6.9.1",
+    "applicationType": "microservice",
+    "baseName": "rental",
+    "packageName": "com.my.rental",
+    "packageFolder": "com/my/rental",
+    "serverPort": "8043",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mariadb",
+    "searchEngine": false,
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "NzQ5NDgwOGEzMDcyODZmYmE3MWQ3MzNjMzk0OTk5NDU0YjRmZjU1ZGRmYjVjNzU5OWE5OWU1MDRkOWY1ZTE0ZTAwZDUyYWViYjEyY2E3NWVlYTNlODA4YjUxYzdhZDk4MWIwZTA1MTk2MDE5MzJhNDg0N2VkMzI4NWZlOTgxOWM=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1676192296506,
+    "testFrameworks": ["cucumber"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "ko",
+    "languages": ["ko", "en"],
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
