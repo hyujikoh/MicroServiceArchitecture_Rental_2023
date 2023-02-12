@@ -1,5 +1,6 @@
 package com.my.rental.service;
 
+import com.my.rental.domain.RentedItem;
 import com.my.rental.web.rest.dto.RentedItemDTO;
 
 import org.springframework.data.domain.Page;
@@ -15,10 +16,10 @@ public interface RentedItemService {
     /**
      * Save a rentedItem.
      *
-     * @param rentedItemDTO the entity to save.
+     * @param rentedItem the entity to save.
      * @return the persisted entity.
      */
-    RentedItemDTO save(RentedItemDTO rentedItemDTO);
+    RentedItem save(RentedItem rentedItem);
 
     /**
      * Get all the rentedItems.

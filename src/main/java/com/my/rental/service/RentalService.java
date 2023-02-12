@@ -1,5 +1,6 @@
 package com.my.rental.service;
 
+import com.my.rental.domain.Rental;
 import com.my.rental.web.rest.dto.RentalDTO;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ public interface RentalService {
      * @param rentalDTO the entity to save.
      * @return the persisted entity.
      */
-    RentalDTO save(RentalDTO rentalDTO);
+    Rental save(Rental rental);
 
     /**
      * Get all the rentals.

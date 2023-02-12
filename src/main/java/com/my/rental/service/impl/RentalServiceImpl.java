@@ -40,11 +40,9 @@ public class RentalServiceImpl implements RentalService {
      * @return the persisted entity.
      */
     @Override
-    public RentalDTO save(RentalDTO rentalDTO) {
-        log.debug("Request to save Rental : {}", rentalDTO);
-        Rental rental = rentalMapper.toEntity(rentalDTO);
-        rental = rentalRepository.save(rental);
-        return rentalMapper.toDto(rental);
+    public Rental save(Rental rental) {
+        log.debug("Request to save Rental : {}", rental);
+        return rentalRepository.save(rental);
     }
 
     /**

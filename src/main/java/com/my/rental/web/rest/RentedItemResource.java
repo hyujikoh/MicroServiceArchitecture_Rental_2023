@@ -4,6 +4,7 @@ import com.my.rental.service.RentedItemService;
 import com.my.rental.web.rest.errors.BadRequestAlertException;
 import com.my.rental.web.rest.dto.RentedItemDTO;
 
+import com.my.rental.web.rest.mapper.RentedItemMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -37,9 +38,11 @@ public class RentedItemResource {
     private String applicationName;
 
     private final RentedItemService rentedItemService;
+    private final RentedItemMapper rentedItemMapper;
 
-    public RentedItemResource(RentedItemService rentedItemService) {
+    public RentedItemResource(RentedItemService rentedItemService, RentedItemMapper rentedItemMapper) {
         this.rentedItemService = rentedItemService;
+        this.rentedItemMapper = rentedItemMapper;
     }
 
     /**
@@ -55,7 +58,7 @@ public class RentedItemResource {
         if (rentedItemDTO.getId() != null) {
             throw new BadRequestAlertException("A new rentedItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RentedItemDTO result = rentedItemService.save(rentedItemDTO);
+        RentedItemDTO result = rentedItemMapper.toDto(rentedItemService.save(rentedItemMapper.toEntity(rentedItemDTO)));
         return ResponseEntity.created(new URI("/api/rented-items/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +79,7 @@ public class RentedItemResource {
         if (rentedItemDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        RentedItemDTO result = rentedItemService.save(rentedItemDTO);
+        RentedItemDTO result = rentedItemMapper.toDto(rentedItemService.save(rentedItemMapper.toEntity(rentedItemDTO)));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rentedItemDTO.getId().toString()))
             .body(result);

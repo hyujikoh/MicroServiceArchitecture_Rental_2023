@@ -36,15 +36,13 @@ public class RentedItemServiceImpl implements RentedItemService {
     /**
      * Save a rentedItem.
      *
-     * @param rentedItemDTO the entity to save.
+     * @param rentedItem the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public RentedItemDTO save(RentedItemDTO rentedItemDTO) {
-        log.debug("Request to save RentedItem : {}", rentedItemDTO);
-        RentedItem rentedItem = rentedItemMapper.toEntity(rentedItemDTO);
-        rentedItem = rentedItemRepository.save(rentedItem);
-        return rentedItemMapper.toDto(rentedItem);
+    public RentedItem save(RentedItem rentedItem) {
+        log.debug("Request to save RentedItem : {}", rentedItem);
+        return rentedItemRepository.save(rentedItem);
     }
 
     /**

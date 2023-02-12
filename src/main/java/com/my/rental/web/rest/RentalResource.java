@@ -1,9 +1,11 @@
 package com.my.rental.web.rest;
 
+import com.my.rental.domain.Rental;
 import com.my.rental.service.RentalService;
 import com.my.rental.web.rest.errors.BadRequestAlertException;
 import com.my.rental.web.rest.dto.RentalDTO;
 
+import com.my.rental.web.rest.mapper.RentalMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -37,8 +39,9 @@ public class RentalResource {
     private String applicationName;
 
     private final RentalService rentalService;
-
-    public RentalResource(RentalService rentalService) {
+    private final RentalMapper rentalMapper;
+    public RentalResource(RentalService rentalService,RentalMapper rentalMapper) {
+        this.rentalMapper = rentalMapper;
         this.rentalService = rentalService;
     }
 
@@ -55,7 +58,7 @@ public class RentalResource {
         if (rentalDTO.getId() != null) {
             throw new BadRequestAlertException("A new rental cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RentalDTO result = rentalService.save(rentalDTO);
+        RentalDTO result = rentalMapper.toDto(rentalService.save(rentalMapper.toEntity(rentalDTO)));
         return ResponseEntity.created(new URI("/api/rentals/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +79,7 @@ public class RentalResource {
         if (rentalDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        RentalDTO result = rentalService.save(rentalDTO);
+        RentalDTO result = rentalMapper.toDto(rentalService.save(rentalMapper.toEntity(rentalDTO)));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rentalDTO.getId().toString()))
             .body(result);
