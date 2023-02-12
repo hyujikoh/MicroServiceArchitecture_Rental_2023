@@ -3,8 +3,8 @@ package com.my.rental.service.impl;
 import com.my.rental.service.RentalService;
 import com.my.rental.domain.Rental;
 import com.my.rental.repository.RentalRepository;
-import com.my.rental.service.dto.RentalDTO;
-import com.my.rental.service.mapper.RentalMapper;
+import com.my.rental.web.rest.dto.RentalDTO;
+import com.my.rental.web.rest.mapper.RentalMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

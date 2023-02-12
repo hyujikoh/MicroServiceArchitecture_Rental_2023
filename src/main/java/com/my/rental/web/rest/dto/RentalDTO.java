@@ -1,4 +1,4 @@
-package com.my.rental.service.dto;
+package com.my.rental.web.rest.dto;
 
 import java.io.Serializable;
 import com.my.rental.domain.enumeration.RentalStatus;
@@ -7,14 +7,14 @@ import com.my.rental.domain.enumeration.RentalStatus;
  * A DTO for the {@link com.my.rental.domain.Rental} entity.
  */
 public class RentalDTO implements Serializable {
-    
+
     private Long id;
 
     private Long userId;
 
     private RentalStatus rentalStatus;
 
-    
+
     public Long getId() {
         return id;
     }

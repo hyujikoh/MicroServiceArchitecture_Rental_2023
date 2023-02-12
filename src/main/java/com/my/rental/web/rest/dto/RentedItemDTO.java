@@ -1,4 +1,4 @@
-package com.my.rental.service.dto;
+package com.my.rental.web.rest.dto;
 
 import java.time.LocalDate;
 import java.io.Serializable;
@@ -7,7 +7,7 @@ import java.io.Serializable;
  * A DTO for the {@link com.my.rental.domain.RentedItem} entity.
  */
 public class RentedItemDTO implements Serializable {
-    
+
     private Long id;
 
     private Long bookId;
@@ -18,7 +18,7 @@ public class RentedItemDTO implements Serializable {
 
 
     private Long rentalId;
-    
+
     public Long getId() {
         return id;
     }

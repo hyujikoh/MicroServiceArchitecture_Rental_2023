@@ -1,4 +1,4 @@
-package com.my.rental.service.mapper;
+package com.my.rental.web.rest.mapper;
 
 import java.util.List;
 

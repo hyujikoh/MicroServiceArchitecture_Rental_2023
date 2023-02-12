@@ -1,8 +1,8 @@
-package com.my.rental.service.mapper;
+package com.my.rental.web.rest.mapper;
 
 
 import com.my.rental.domain.*;
-import com.my.rental.service.dto.RentedItemDTO;
+import com.my.rental.web.rest.dto.RentedItemDTO;
 
 import org.mapstruct.*;
 

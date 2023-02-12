@@ -1,5 +1,6 @@
 package com.my.rental.service.dto;
 
+import com.my.rental.web.rest.dto.RentalDTO;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import com.my.rental.web.rest.TestUtil;

@@ -4,8 +4,8 @@ import com.my.rental.RentalApp;
 import com.my.rental.domain.Rental;
 import com.my.rental.repository.RentalRepository;
 import com.my.rental.service.RentalService;
-import com.my.rental.service.dto.RentalDTO;
-import com.my.rental.service.mapper.RentalMapper;
+import com.my.rental.web.rest.dto.RentalDTO;
+import com.my.rental.web.rest.mapper.RentalMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -140,7 +140,7 @@ public class RentalResourceIT {
             .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.intValue())))
             .andExpect(jsonPath("$.[*].rentalStatus").value(hasItem(DEFAULT_RENTAL_STATUS.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getRental() throws Exception {

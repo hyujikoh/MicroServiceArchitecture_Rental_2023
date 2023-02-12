@@ -2,7 +2,7 @@ package com.my.rental.web.rest;
 
 import com.my.rental.service.RentalService;
 import com.my.rental.web.rest.errors.BadRequestAlertException;
-import com.my.rental.service.dto.RentalDTO;
+import com.my.rental.web.rest.dto.RentalDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -4,8 +4,8 @@ import com.my.rental.RentalApp;
 import com.my.rental.domain.RentedItem;
 import com.my.rental.repository.RentedItemRepository;
 import com.my.rental.service.RentedItemService;
-import com.my.rental.service.dto.RentedItemDTO;
-import com.my.rental.service.mapper.RentedItemMapper;
+import com.my.rental.web.rest.dto.RentedItemDTO;
+import com.my.rental.web.rest.mapper.RentedItemMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -148,7 +148,7 @@ public class RentedItemResourceIT {
             .andExpect(jsonPath("$.[*].rentedDate").value(hasItem(DEFAULT_RENTED_DATE.toString())))
             .andExpect(jsonPath("$.[*].dueDate").value(hasItem(DEFAULT_DUE_DATE.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getRentedItem() throws Exception {

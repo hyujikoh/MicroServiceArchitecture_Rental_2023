@@ -1,5 +1,6 @@
 package com.my.rental.service.mapper;
 
+import com.my.rental.web.rest.mapper.RentalMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;

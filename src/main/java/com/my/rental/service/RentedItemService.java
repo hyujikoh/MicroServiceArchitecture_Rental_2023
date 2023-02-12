@@ -1,6 +1,6 @@
 package com.my.rental.service;
 
-import com.my.rental.service.dto.RentedItemDTO;
+import com.my.rental.web.rest.dto.RentedItemDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
