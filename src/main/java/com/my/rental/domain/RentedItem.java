@@ -37,6 +37,16 @@ public class RentedItem implements Serializable {
     private Rental rental;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+    public static RentedItem createRentedItem(Rental rental, Long bookId, LocalDate rentedDate) {
+        RentedItem rentedItem = new RentedItem();
+        rentedItem.setBookId(bookId);
+        rentedItem.setRental(rental);
+        rentedItem.setRentedDate(rentedDate);
+        rentedItem.setDueDate(rentedDate.plusWeeks(2)); //총 대여기간 2주 설정
+        return rentedItem;
+    }
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -96,7 +106,7 @@ public class RentedItem implements Serializable {
     public void setRental(Rental rental) {
         this.rental = rental;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -114,7 +124,6 @@ public class RentedItem implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "RentedItem{" +
