@@ -6,6 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.my.rental.domain.enumeration.RentalStatus;
 
@@ -14,7 +16,7 @@ import com.my.rental.domain.enumeration.RentalStatus;
  */
 @Entity
 @Table(name = "rental")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Rental implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +31,21 @@ public class Rental implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "rental_status")
     private RentalStatus rentalStatus;
+
+    @Column(name = "late_fee")
+    private int lateFee;
+
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL,orphanRemoval = true) // 고아 객체 제거 -> rental에서 컬렉션의 객체 삭제시, 해당 컬렉션의 entity삭제
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<RentedItem> rentedItems = new HashSet<>();
+
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL,orphanRemoval = true) // 고아 객체 제거 -> rental에서 컬렉션의 객체 삭제시, 해당 컬렉션의 entity삭제
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<OverdueItem> overdueItems = new HashSet<>();
+
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL,orphanRemoval = true) // 고아 객체 제거 -> rental에서 컬렉션의 객체 삭제시, 해당 컬렉션의 entity삭제
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ReturnedItem> returnedItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
