@@ -198,46 +198,75 @@ public class Rental implements Serializable {
             ", lateFee=" + getLateFee() +
             "}";
     }
-    //생성메소드//
+    //rental 엔티티 생성 메서드 //
     public static Rental createRental(Long userId){
         Rental rental = new Rental();
-        rental.setUserId(userId);
+        rental.setUserId(userId); // 사용자 일련번호 추가
+        // 대출이 가능하도록 상태를 변경
         rental.setRentalStatus(RentalStatus.OK);
         rental.setRentedItems(new HashSet<>());
         rental.setOverdueItems(new HashSet<>());
         rental.setReturnedItems(new HashSet<>());
-        rental.setLateFee((long)0);
+        rental.setLateFee((long)0); // 연체료 초기화
         return rental;
     }
 
-    //대여하기 메소드//
-    public Rental rentBooks(List<Long> bookIds){
-        if(checkRentalAvailable(bookIds.size())){
-            for(Long bookId : bookIds){
-                RentedItem rentedItem = RentedItem.createRentedItem(this, bookId, LocalDate.now());
-                this.addRentedItem(rentedItem);
-            }
-            this.setRentalStatus(RentalStatus.RENTED);
-            this.setLateFee((long)0);
-            return this;
 
-        }else{
-            return null;
-        }
+
+    //대여하기 메소드//
+//    public Rental rentBooks(List<Long> bookIds){
+//        if(checkRentalAvailable(bookIds.size())){
+//            for(Long bookId : bookIds){
+//                RentedItem rentedItem = RentedItem.createRentedItem(this, bookId, LocalDate.now());
+//                this.addRentedItem(rentedItem);
+//            }
+//            this.setRentalStatus(RentalStatus.RENTED);
+//            this.setLateFee((long)0);
+//            return this;
+//
+//        }else{
+//            return null;
+//        }
+//    }
+    //대출처리 메서드
+    public Rental rentBooks(Long bookId, String title){
+        this.addRentedItem(RentedItem.createRentedItem(bookId,title,LocalDate.now()));
+        return this;
     }
 
-    public boolean checkRentalAvailable(Integer newBookCnt){
-        if(this.rentalStatus!=RentalStatus.OVERDUE){
+    //반납 처리 메서드
+    public Rental returnBooks(Long bookId){
+        RentedItem rentedItem = this.rentedItems
+            .stream()
+            .filter(item -> item.getBookId().equals(bookId)).findFirst().get(); // 대여한 책 들 중 해당 book id 를 갖는 대출도서를 찾는 stream 문법, 이때 findFirst 를 통해 가장 첫번째로 나오는 걸 꺼낸다.
+        this.removeRentedItem(rentedItem);
+        return this;
+    }
 
-            if(this.rentedItems.size()+newBookCnt >5){
-                System.out.println("대출 가능한 도서의 수는 "+( 5- this.getRentedItems().size())+"권 입니다.");
-                return false;
-            }else{
-                return true;
-            }
-        }else{
-            System.out.println("연체 상태입니다.");
-            return false;
+
+//    //대출 가능 여부 체크
+//    public boolean checkRentalAvailable(Integer newBookCnt){
+//        if(this.rentalStatus!=RentalStatus.OVERDUE){
+//            if(this.rentedItems.size()+newBookCnt >5){
+//                System.out.println("대출 가능한 도서의 수는 "+( 5- this.getRentedItems().size())+"권 입니다.");
+//                return false;
+//            }else{
+//                return true;
+//            }
+//        }else{
+//            System.out.println("연체 상태입니다.");
+//            return false;
+//        }
+//    }
+    //대출 가능 여부 체크 (초기 버전)
+    public boolean checkRentalAvailable() throws Exception{
+        if(this.rentalStatus.equals(RentalStatus.RENT_AVAILABLE)||this.getLateFee()!=0){
+            throw new Exception("연체 상태입니다. 연체료 정산후 도서를 대출하실 수 있습니다.");
+
         }
+        if (this.getRentedItems().size()>=5){
+            throw new Exception("대출 가능 도서수는 " +(5-this.getRentedItems().size()) + "권 입니다");
+        }
+        return true;
     }
 }

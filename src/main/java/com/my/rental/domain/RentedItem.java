@@ -1,6 +1,7 @@
 package com.my.rental.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "rented_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Data
 public class RentedItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,28 +25,44 @@ public class RentedItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 대출한 재고 도서 일련번호(도서 서비스에서 발행한 번호)
     @Column(name = "book_id")
     private Long bookId;
 
+    //대출일자
     @Column(name = "rented_date")
     private LocalDate rentedDate;
 
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    @Column(name = "book_title")
+    private String bookTitle;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "rentedItems", allowSetters = true)
     private Rental rental;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-    public static RentedItem createRentedItem(Rental rental, Long bookId, LocalDate rentedDate) {
+//    // jhipster-needle-entity-add-field - JHipster will add fields here
+//    public static RentedItem createRentedItem(Rental rental, Long bookId, LocalDate rentedDate) {
+//        RentedItem rentedItem = new RentedItem();
+//        rentedItem.setBookId(bookId);
+//        rentedItem.setRental(rental);
+//        rentedItem.setRentedDate(rentedDate);
+//        rentedItem.setDueDate(rentedDate.plusWeeks(2)); //총 대여기간 2주 설정
+//        return rentedItem;
+//    }
+
+    public static RentedItem createRentedItem(Long bookId,String title, LocalDate rentedDate) {
         RentedItem rentedItem = new RentedItem();
         rentedItem.setBookId(bookId);
-        rentedItem.setRental(rental);
+        rentedItem.setBookTitle(title);
         rentedItem.setRentedDate(rentedDate);
         rentedItem.setDueDate(rentedDate.plusWeeks(2)); //총 대여기간 2주 설정
         return rentedItem;
     }
+
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
