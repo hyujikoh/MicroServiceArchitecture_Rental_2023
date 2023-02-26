@@ -16,7 +16,7 @@ public interface RentalService {
     /**
      * Save a rental.
      *
-     * @param rentalDTO the entity to save.
+     * @param rental the entity to save.
      * @return the persisted entity.
      */
     Rental save(Rental rental);
@@ -44,4 +44,15 @@ public interface RentalService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * 도서 대출
+     * @param userId
+     * @param bookId
+     * @param bookTitle
+     * @return
+     */
+    Rental rentBook(Long userId, Long bookId, String bookTitle) throws Exception;
+
+    Rental returnBooks(Long userId, Long bookId);
 }

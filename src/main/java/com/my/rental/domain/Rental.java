@@ -1,5 +1,7 @@
 package com.my.rental.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -19,6 +21,8 @@ import com.my.rental.domain.enumeration.RentalStatus;
 @Entity
 @Table(name = "rental")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Getter
+@Setter
 public class Rental implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -229,7 +233,7 @@ public class Rental implements Serializable {
 //        }
 //    }
     //대출처리 메서드
-    public Rental rentBooks(Long bookId, String title){
+    public Rental rentBook(Long bookId, String title){
         this.addRentedItem(RentedItem.createRentedItem(bookId,title,LocalDate.now()));
         return this;
     }

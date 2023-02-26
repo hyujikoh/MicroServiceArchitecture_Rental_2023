@@ -36,7 +36,7 @@ public class RentalServiceImpl implements RentalService {
     /**
      * Save a rental.
      *
-     * @param rentalDTO the entity to save.
+     * @param rental the entity to save.
      * @return the persisted entity.
      */
     @Override
@@ -83,5 +83,42 @@ public class RentalServiceImpl implements RentalService {
     public void delete(Long id) {
         log.debug("Request to delete Rental : {}", id);
         rentalRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Rental rentBook(Long userId, Long bookId, String bookTitle) throws Exception{
+
+        Rental rental = rentalRepository.findByUserId(userId).get();// 유저의 Rental 정보 조회
+        rental.checkRentalAvailable();// 대출가능 상태 확인
+        rental = rental.rentBook(bookId,bookTitle); // rental 도메인에 대출 처리 위임
+        rentalRepository.save(rental);// rental 저장
+
+        // 도서 서비스에 도서 재고 감소를 위해 도서 대출 이벤트 발송
+        rentalProceducer.updateBookStatus(bookId,"UNAVAILABLE");
+
+        // 도서 카탈로그 서비스에 대출된 도서로 상태를 변경하기 위한 이벤트 발송
+        rentalProceducer.updateBookCatalog(bookId,"RENT_BOOK");
+
+        //대출로 인한 사용자 포인트 적립을 위해 사용자 서비스에 이벤트 발송
+        rentalProceducer.savePoints(userId);
+
+        return rental;
+    }
+
+    @Override
+    @Transactional
+    public Rental returnBooks(Long userId, Long bookId) {
+        Rental rental = rentalRepository.findByUserId(userId).get();//반납 아이템 검사
+        rental = rental.returnBooks(bookId);// rental 도메인에 반납 처리 위임
+        rental = rentalRepository.save(rental);
+
+        // 도서 서비스에 도서 재고 증가를 위해 도서 대출 이벤트 발송
+        rentalProceducer.updateBookStatus(bookId,"AVAILABLE");
+
+        // 도서 카탈로그 서비스에 대출 가능한 도서로 상태를 변경하기 위한 이벤트 발송
+        rentalProceducer.updateBookCatalog(bookId,"RETURN_BOOk");
+
+        return rental;
     }
 }
