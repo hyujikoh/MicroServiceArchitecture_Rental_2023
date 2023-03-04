@@ -1,7 +1,9 @@
 package com.my.rental.web.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.my.rental.domain.Rental;
 import com.my.rental.service.RentalService;
+import com.my.rental.web.rest.dto.BookInfoDTO;
 import com.my.rental.web.rest.errors.BadRequestAlertException;
 import com.my.rental.web.rest.dto.RentalDTO;
 
@@ -35,6 +37,8 @@ public class RentalResource {
 
     private static final String ENTITY_NAME = "rentalRental";
 
+    private final BookClient bookClient;
+    private final UserClient userClient;
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -123,5 +127,45 @@ public class RentalResource {
         log.debug("REST request to delete Rental : {}", id);
         rentalService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * 도서 대출 하기
+     * @param userid
+     * @param bookId
+     * @return
+     * @throws InterruptedException
+
+     * @throws JsonProcessingException
+     */
+    @PostMapping("/rentals/{userid}/RentedItem/{book}")
+    public ResponseEntity<RentalDTO> rentBooks(@PathVariable("userid") Long userid,
+                                               @PathVariable("book") Long bookId) {
+        log.debug("rent book request");
+        // 도서 서비스 호출해 도서 정보 가져오기
+        ResponseEntity<BookInfoDTO> bookInfoResult = bookClient.findBookInfo(bookId); //feign - 책 정보 가져오기
+        BookInfoDTO bookInfoDTO = bookInfoResult.getBody();
+        log.debug("book info list", bookInfoDTO.toString());
+
+        Rental rental= rentalService.rentBook(userid, bookInfoDTO.getId(), bookInfoDTO.getTitle());
+        RentalDTO rentalDTO = rentalMapper.toDto(rental);
+        return ResponseEntity.ok().body(rentalDTO);
+    }
+
+    /**
+     * 도서 반납 하기
+     *
+     * @param userid
+     * @param book
+     * @return
+     */
+    @DeleteMapping("/rentals/{userid}/RentedItem/{book}")
+    public ResponseEntity returnBooks(@PathVariable("userid") Long userid, @PathVariable("book") Long book) throws InterruptedException, ExecutionException, JsonProcessingException {
+        Rental rental = rentalService.returnBook(userid, book); // 도서반납 서비스 로직 실행
+        log.debug("returned books");
+        log.debug("SEND BOOKIDS for Book: {}", book);
+
+        RentalDTO result = rentalMapper.toDto(rental);
+        return ResponseEntity.ok().body(result);
     }
 }
