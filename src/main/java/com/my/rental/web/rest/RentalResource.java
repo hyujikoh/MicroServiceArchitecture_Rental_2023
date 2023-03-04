@@ -165,8 +165,8 @@ public class RentalResource {
      * @return
      */
     @DeleteMapping("/rentals/{userId}/RentedItem/{book}")
-    public ResponseEntity returnBooks(@PathVariable("userId") Long userId, @PathVariable("book") Long book)  {
-        Rental rental = rentalService.returnBook(userId, book); // 도서반납 서비스 로직 실행
+    public ResponseEntity returnBooks(@PathVariable("userId") Long userId, @PathVariable("book") Long book) throws  Exception {
+        Rental rental = rentalService.returnBooks(userId, book); // 도서반납 서비스 로직 실행
         log.debug("returned books");
         log.debug("SEND BOOKIDS for Book: {}", book);
 
