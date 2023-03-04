@@ -12,6 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +24,8 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableDiscoveryClient
+@EnableFeignClients // @feginCliend 라고 설정된 인터페이스를 찾아 구현체로 만든다. 
 public class RentalApp {
 
     private static final Logger log = LoggerFactory.getLogger(RentalApp.class);

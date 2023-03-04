@@ -1,6 +1,7 @@
 package com.my.rental.web.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.my.rental.adaptor.BookClient;
 import com.my.rental.domain.Rental;
 import com.my.rental.service.RentalService;
 import com.my.rental.web.rest.dto.BookInfoDTO;
@@ -11,6 +12,7 @@ import com.my.rental.web.rest.mapper.RentalMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.my.rental.domain.Rental}.
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class RentalResource {
 
@@ -44,9 +47,11 @@ public class RentalResource {
 
     private final RentalService rentalService;
     private final RentalMapper rentalMapper;
-    public RentalResource(RentalService rentalService,RentalMapper rentalMapper) {
+    public RentalResource(RentalService rentalService,RentalMapper rentalMapper, BookClient bookClient, UserClient userClient) {
         this.rentalMapper = rentalMapper;
         this.rentalService = rentalService;
+        this.bookClient = bookClient;
+        this.userClient = userClient;
     }
 
     /**
@@ -131,23 +136,23 @@ public class RentalResource {
 
     /**
      * 도서 대출 하기
-     * @param userid
+     * @param userId
      * @param bookId
      * @return
      * @throws InterruptedException
 
      * @throws JsonProcessingException
      */
-    @PostMapping("/rentals/{userid}/RentedItem/{book}")
-    public ResponseEntity<RentalDTO> rentBooks(@PathVariable("userid") Long userid,
-                                               @PathVariable("book") Long bookId) {
+    @PostMapping("/rentals/{userId}/RentedItem/{book}")
+    public ResponseEntity<RentalDTO> rentBooks(@PathVariable("userId") Long userId,
+                                               @PathVariable("book") Long bookId) throws Exception {
         log.debug("rent book request");
-        // 도서 서비스 호출해 도서 정보 가져오기
+        // 도서 서비스 호출해 도서 정보 가져오기(동기 호출 방식인 페인을 사용)
         ResponseEntity<BookInfoDTO> bookInfoResult = bookClient.findBookInfo(bookId); //feign - 책 정보 가져오기
         BookInfoDTO bookInfoDTO = bookInfoResult.getBody();
         log.debug("book info list", bookInfoDTO.toString());
 
-        Rental rental= rentalService.rentBook(userid, bookInfoDTO.getId(), bookInfoDTO.getTitle());
+        Rental rental= rentalService.rentBook(userId, bookInfoDTO.getId(), bookInfoDTO.getTitle());
         RentalDTO rentalDTO = rentalMapper.toDto(rental);
         return ResponseEntity.ok().body(rentalDTO);
     }
@@ -155,13 +160,13 @@ public class RentalResource {
     /**
      * 도서 반납 하기
      *
-     * @param userid
+     * @param userId
      * @param book
      * @return
      */
-    @DeleteMapping("/rentals/{userid}/RentedItem/{book}")
-    public ResponseEntity returnBooks(@PathVariable("userid") Long userid, @PathVariable("book") Long book) throws InterruptedException, ExecutionException, JsonProcessingException {
-        Rental rental = rentalService.returnBook(userid, book); // 도서반납 서비스 로직 실행
+    @DeleteMapping("/rentals/{userId}/RentedItem/{book}")
+    public ResponseEntity returnBooks(@PathVariable("userId") Long userId, @PathVariable("book") Long book)  {
+        Rental rental = rentalService.returnBook(userId, book); // 도서반납 서비스 로직 실행
         log.debug("returned books");
         log.debug("SEND BOOKIDS for Book: {}", book);
 
