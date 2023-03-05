@@ -144,5 +144,13 @@ public class RentalServiceImpl implements RentalService {
         return rentalRepository.save(rental);//(4) 저장
     }
 
+    //대출 불가 해제 처리
+    @Override
+    public Rental releaseOverdue(Long userId) {
+        Rental rental = rentalRepository.findByUserId(userId).get();
+        rental = rental.releaseOverdue();
+        return rentalRepository.save(rental);
+    }
+
 
 }

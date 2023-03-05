@@ -312,5 +312,10 @@ public class Rental implements Serializable {
         return this;
     }
 
-
+    //대출불가 해제 처리
+    public Rental releaseOverdue(){
+        this.setLateFee(0L);
+        this.setRentalStatus(RentalStatus.RENT_AVAILABLE);
+        return this;
+    }
 }

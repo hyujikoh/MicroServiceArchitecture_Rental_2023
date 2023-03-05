@@ -59,4 +59,6 @@ public interface RentalService {
     Long beOverdueBook(Long rentalId, Long bookId);
 
     Rental returnOverdueBook(Long userId, Long bookId) throws Exception;
+
+    Rental releaseOverdue(Long userId);
 }
