@@ -125,4 +125,24 @@ public class RentalServiceImpl implements RentalService {
 
         return rental;
     }
+
+    @Override
+    public Long beOverdueBook(Long rentalId, Long bookId) {
+        Rental rental = rentalRepository.findById(rentalId).get();//(1) 사용자 일련번호에 해당하는 rental 조회
+        rental = rental.overdueBook(bookId);//(2) 도서 연체 처리를 rental 객체에 위임해 처리한다
+        rental = rental.makeRentUnable();//(3) rental 대출 가능 여부 상태를 대출 불가로 설정
+        rentalRepository.save(rental);//(4) 저장
+        return bookId;
+    }
+
+    @Override
+    public Rental returnOverdueBook(Long userId, Long bookId) throws  Exception{
+        Rental rental = rentalRepository.findByUserId(userId).get();//(1) 사용자 일련번호에 해당하는 rental 조회
+        rental = rental.returnOverdueBook(bookId);//(2) 도서 연체 처리를 rental 객체에 위임해 처리한다
+        rentalProducer.updateBookStatus(bookId,"AVAILABLE");
+        rentalProducer.updateBookCatalogStatus(bookId, "RETURN_BOOK");//(3) rental 대출 가능 여부 상태를 대출 불가로 설정
+        return rentalRepository.save(rental);//(4) 저장
+    }
+
+
 }

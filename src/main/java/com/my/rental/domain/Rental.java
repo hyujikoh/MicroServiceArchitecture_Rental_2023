@@ -1,5 +1,6 @@
 package com.my.rental.domain;
 
+import jdk.vm.ci.meta.Local;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
@@ -273,4 +274,43 @@ public class Rental implements Serializable {
         }
         return true;
     }
+
+    // 연체 처리 메서드
+    public Rental overdueBook(Long bookId){
+        RentedItem rentedItem = this.rentedItems
+            .stream()
+            .filter(item -> item.getBookId().equals(bookId)).findFirst().get();
+
+        this.addOverdueItem(OverdueItem.createOverdueItem(
+                                        rentedItem.getBookId(),
+                                        rentedItem.getBookTitle(),
+                                        rentedItem.getDueDate()
+        ));
+        this.removeRentedItem(rentedItem);
+        return this;
+    }
+
+    // 연체아이템 반납 처리 메서드
+    public Rental returnOverdueBook(Long bookId){
+        OverdueItem overdueItem = this.overdueItems
+            .stream()
+            .filter(item -> item.getBookId().equals(bookId)).findFirst().get();
+
+        this.addReturnedItem(ReturnedItem.createReturnedItem(
+            overdueItem.getBookId(),
+            overdueItem.getBookTitle(),
+            LocalDate.now()
+        ));
+        this.removeOverdueItem(overdueItem);
+        return this;
+    }
+
+    // 대출불가 처리 메서드
+    public Rental makeRentUnable(){
+        this.setRentalStatus(RentalStatus.RENT_UNAVAILABLE);
+        this.setLateFee(this.getLateFee()+30);
+        return this;
+    }
+
+
 }

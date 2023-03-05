@@ -55,4 +55,8 @@ public interface RentalService {
     Rental rentBook(Long userId, Long bookId, String bookTitle) throws Exception;
 
     Rental returnBooks(Long userId, Long bookId) throws Exception;
+
+    Long beOverdueBook(Long rentalId, Long bookId);
+
+    Rental returnOverdueBook(Long userId, Long bookId) throws Exception;
 }
